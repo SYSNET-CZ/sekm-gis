@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <meta charset="utf-8">
+        <title>Nejbližší indicie</title>
+    </head>
+<body>
+    <h1>Nejbližší indicie</h1>
+    {% if indicie_list %}
+    <ul>
+    {% for indicie in indicie_list %}
+        <li>
+        {{ indicie.indic_id }}: {{indicie.distance}} ID: {{ indicie.id }} ( x={{ indicie.xcoord }} , y={{ indicie.ycoord }} )
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>

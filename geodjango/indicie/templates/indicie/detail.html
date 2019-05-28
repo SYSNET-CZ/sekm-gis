@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load leaflet_tags %}
+<html lang="cs">
+    <head>
+        {% leaflet_js %}
+        {% leaflet_css %}
+        <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+        <style>
+            .leaflet-container { height: 100%; }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Idicie: {{ indiciedpz.indic_id }} - {{ indiciedpz.naz_ku_p }}</title>
+    </head>
+    <body>
+        <h1>{{ indiciedpz.indic_id }} - {{ indiciedpz.naz_ku_p }}</h1>
+        {% leaflet_map "main" callback="map_init" %}
+        <script type="text/javascript">
+            function map_init(map, options) {
+                // get point lat and lon
+                var lon = "{{ indiciedpz.wgs.x }}";
+                var lat = "{{ indiciedpz.wgs.y }}";
+                lon = lon.replace(",", ".");
+                lat = lat.replace(",", ".");
+
+                var popup = "{{ indiciedpz.indic_id }} - {{ indiciedpz.naz_ku_p }}";
+
+                // zoom to point & add it to map
+                map.setView([lat, lon], 12);
+                L.marker([lat, lon]).bindPopup(popup).addTo(map);
+                var wmsOrtofoto = L.tileLayer.wms('http://geoportal.cuzk.cz/WMS_ORTOFOTO_PUB/WMService.aspx?', { layers: 'GR_ORTFOTORGB'});
+                var wmsZm25 = L.tileLayer.wms('http://geoportal.cuzk.cz/WMS_ZM25_PUB/WMService.aspx?', { layers: 'GR_ZM25'});
+                //wmsZm25.addTo(map);
+                var baseMaps = {
+                    "Základní mapa 1:25000": wmsZm25
+                };
+                var overlayMaps = {
+                    "Ortofoto": wmsOrtofoto
+                };
+                L.control.layers(baseMaps, overlayMaps).addTo(map);
+            }
+        </script>
+    </body>
+</html>
+
